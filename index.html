@@ -14,31 +14,33 @@
     <center>
         <div id="content-before-loading">
             <h1>yuri!</h1>
-            <p>images sourced from <a href="https://danbooru.donmai.us/">danbooru</a>!
+            <p>images sourced from <a href="https://danbooru.donmai.us/">danbooru</a>!</p>
+            <p>click on images to download fullres!!</p>
             <hr>
         </div>
         <p>loading...</p>
     </center>
     <script>
         const before_loading = document.getElementById("content-before-loading");
+        var loading = true;
 
         async function getInformation() {
             const result = await fetch("https://danbooru.donmai.us/posts.json?tags=yuri+rating:general+order:random&limit=10");
             const data = await result.json();
 
             data.forEach(image => {
-                const new_div = document.createElement("div");
-                new_div.innerHTML = `<img src="${image.file_url}"><hr>`;
-                before_loading.appendChild(new_div);
+                const new_img = document.createElement("div");
+                const new_img_url = image.large_file_url.replace("cdn.donmai.us", "yuriproxy.minkos.lol")
+                new_img.innerHTML = `<a href="${image.file_url}"><img src="${new_img_url}" style="max-width:100%;"></a><hr>`;
+                before_loading.appendChild(new_img);
             });
+
+            loading = false;
         }
 
         window.addEventListener("scroll", async () => {
-            if (
-                document.documentElement.scrollTop +
-                document.documentElement.clientHeight >=
-                document.documentElement.scrollHeight
-            ) {
+            if (document.documentElement.scrollTop + document.documentElement.clientHeight >= document.documentElement.scrollHeight - 2000 && !loading) {
+                loading = true;
                 await getInformation();
             }
         });
