@@ -30,7 +30,11 @@
 
             data.forEach(image => {
                 const new_img = document.createElement("div");
-                const new_img_url = image.large_file_url.replace("cdn.donmai.us", "yuriproxy.minkos.lol")
+                if (image["large_file_url"]) {
+                    const new_img_url = image.large_file_url.replace("cdn.donmai.us", "yuriproxy.minkos.lol");
+                } else {
+                    const new_img_url = image.file_url.replace("cdn.donmai.us", "yuriproxy.minkos.lol");
+                }
                 new_img.innerHTML = `<a href="${image.file_url}"><img src="${new_img_url}" style="max-width:100%;"></a><hr>`;
                 before_loading.appendChild(new_img);
             });
