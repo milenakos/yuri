@@ -10,26 +10,24 @@
     <title>yuri.minkos.lol</title>
 </head>
 
+
 <body>
     <center>
         <div id="content-before-loading">
             <h1>yuri!</h1>
             <p>images sourced from <a href="https://danbooru.donmai.us/">danbooru</a>!</p>
             <p>click on images to download fullres!!</p>
+            <label for="column-slider">columns:</label>
+            <input type="range" id="column-slider" min="1" max="20" value="1" />
             <hr>
         </div>
+        <div id="content-before-loading" style="display: grid; grid-template-columns: repeat(1, 1fr); gap: 10px;"></div>
         <p>loading...</p>
     </center>
+
     <script>
-        const before_loading = document.getElementById("content-before-loading");
-        var loading = true;
-
-        async function getInformation() {
-            const result = await fetch("https://danbooru.donmai.us/posts.json?tags=yuri+rating:general+order:random&limit=10");
-            const data = await result.json();
-
-            data.forEach(image => {
-                try {
+        const imageContainer = document.getElementById("content-before-loading");
+        const columnSlider = document.getElementById("column-slider");
                     const new_img = document.createElement("div");
                     let new_img_url;
                     let format;
@@ -45,6 +43,19 @@
                     }
                     new_img.innerHTML = `<a href="${image.file_url}?download=1"><${format} src="${new_img_url}" style="max-width:100%;"></a><hr>`;
                     before_loading.appendChild(new_img);
+        async function getInformation() {
+            const result = await fetch("https://danbooru.donmai.us/posts.json?tags=yuri+rating:general+order:random&limit=10");
+            const data = await result.json();
+
+            data.forEach(image => {
+                try {
+                    const newImg = document.createElement("div");
+                    let newImgUrl = image.large_file_url 
+                        ? image.large_file_url.replace("cdn.donmai.us", "yuriproxy.minkos.lol") 
+                        : image.file_url.replace("cdn.donmai.us", "yuriproxy.minkos.lol");
+
+                    newImg.innerHTML = `<a href="${image.file_url}?download=1"><img src="${newImgUrl}" style="max-width:100%;"></a>`;
+                    imageContainer.appendChild(newImg);
                 } catch (e) {
                     console.error(e);
                 }
@@ -61,7 +72,6 @@
         });
 
         getInformation();
-  </script>
+    </script>
 </body>
-
 </html>
