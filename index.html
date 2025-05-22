@@ -1,3 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=3.0" name="viewport" />
+    <meta property="og:site_name" content="yuri.minkos.lol" />
+    <meta property="og:title" content="yuri.minkos.lol" />
+    <meta property="og:description" content="An infinite yuri scroller." />
+    <meta content="https://yuri.minkos.lol" property="og:url">
+    <title>yuri.minkos.lol</title>
+</head>
+
+
 <body>
     <center>
         <div id="content-before-loading">
@@ -8,20 +21,28 @@
             <input type="range" id="column-slider" min="1" max="20" value="1" />
             <hr>
         </div>
-        <div id="image-container" style="display: grid; grid-template-columns: repeat(1, 1fr); gap: 10px;"></div>
+        <div id="content-before-loading" style="display: grid; grid-template-columns: repeat(1, 1fr); gap: 10px;"></div>
         <p>loading...</p>
     </center>
 
     <script>
-        const imageContainer = document.getElementById("image-container");
+        const imageContainer = document.getElementById("content-before-loading");
         const columnSlider = document.getElementById("column-slider");
-        var loading = true;
-
-        columnSlider.addEventListener("input", () => {
-            const columnCount = columnSlider.value;
-            imageContainer.style.gridTemplateColumns = `repeat(${columnCount}, 1fr)`;
-        });
-
+                    const new_img = document.createElement("div");
+                    let new_img_url;
+                    let format;
+                    if (image["large_file_url"]) {
+                        new_img_url = image.large_file_url.replace("cdn.donmai.us", "yuriproxy.minkos.lol");
+                    } else {
+                        new_img_url = image.file_url.replace("cdn.donmai.us", "yuriproxy.minkos.lol");
+                    }
+                    if (image.media_asset.duration) {
+                        format = "video";
+                    } else {
+                        format = "img";
+                    }
+                    new_img.innerHTML = `<a href="${image.file_url}?download=1"><${format} src="${new_img_url}" style="max-width:100%;"></a><hr>`;
+                    before_loading.appendChild(new_img);
         async function getInformation() {
             const result = await fetch("https://danbooru.donmai.us/posts.json?tags=yuri+rating:general+order:random&limit=10");
             const data = await result.json();
@@ -53,3 +74,4 @@
         getInformation();
     </script>
 </body>
+</html>
