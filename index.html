@@ -28,6 +28,14 @@
     <script>
         const imageContainer = document.getElementById("content-before-loading");
         const columnSlider = document.getElementById("column-slider");
+
+        async function getInformation() {
+            const result = await fetch("https://danbooru.donmai.us/posts.json?tags=yuri+rating:general+order:random&limit=10");
+            const data = await result.json();
+
+            data.forEach(image => {
+                try {
+
                     const new_img = document.createElement("div");
                     let new_img_url;
                     let format;
@@ -41,21 +49,10 @@
                     } else {
                         format = "img";
                     }
-                    new_img.innerHTML = `<a href="${image.file_url}?download=1"><${format} src="${new_img_url}" style="max-width:100%;"></a><hr>`;
-                    imageContainer.appendChild(new_img);
-        async function getInformation() {
-            const result = await fetch("https://danbooru.donmai.us/posts.json?tags=yuri+rating:general+order:random&limit=10");
-            const data = await result.json();
-
-            data.forEach(image => {
-                try {
-                    const new_img = document.createElement("div");
-                    let new_img_url = image.large_file_url 
-                        ? image.large_file_url.replace("cdn.donmai.us", "yuriproxy.minkos.lol") 
-                        : image.file_url.replace("cdn.donmai.us", "yuriproxy.minkos.lol");
-
                     new_img.innerHTML = `<a href="${image.file_url}?download=1"><img src="${new_img_url}" style="max-width:100%;"></a>`;
                     imageContainer.appendChild(new_img);
+
+                    
                 } catch (e) {
                     console.error(e);
                 }
