@@ -29,6 +29,14 @@
         const imageContainer = document.getElementById("content-before-loading");
         const columnSlider = document.getElementById("column-slider");
 
+
+
+
+        columnSlider.addEventListener("input", () => {
+            const columnCount = columnSlider.value;
+            imageContainer.style.gridTemplateColumns = `repeat(${columnCount}, 1fr)`;
+        });
+
         async function getInformation() {
             const result = await fetch("https://danbooru.donmai.us/posts.json?tags=yuri+rating:general+order:random&limit=10");
             const data = await result.json();
