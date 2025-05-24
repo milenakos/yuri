@@ -41,24 +41,24 @@
 
             data.forEach(image => {
                 try {
-
                     const new_img = document.createElement("div");
                     let new_img_url;
                     let format;
+
                     if (image["large_file_url"]) {
                         new_img_url = image.large_file_url.replace("cdn.donmai.us", "yuriproxy.minkos.lol");
                     } else {
                         new_img_url = image.file_url.replace("cdn.donmai.us", "yuriproxy.minkos.lol");
                     }
+
                     if (image.media_asset.duration) {
                         format = "video";
                     } else {
                         format = "img";
                     }
-                    new_img.innerHTML = `<a href="${image.file_url}?download=1"><img src="${new_img_url}" style="max-width:100%;"></a>`;
+    
+                    new_img.innerHTML = `<a href="${image.file_url}?download=1"><${format} src="${new_img_url}" style="max-width:100%;"></a>`;
                     imageContainer.appendChild(new_img);
-
-                    
                 } catch (e) {
                     console.error(e);
                 }
