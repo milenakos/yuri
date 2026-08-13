@@ -46,9 +46,9 @@
                     let format;
 
                     if (image["large_file_url"]) {
-                        new_img_url = image.large_file_url;
+                        new_img_url = image.large_file_url.replace("cdn.donmai.us", "proxy.yuri.page");
                     } else {
-                        new_img_url = image.file_url;
+                        new_img_url = image.file_url.replace("cdn.donmai.us", "proxy.yuri.page");
                     }
 
                     if (image.media_asset.duration) {
