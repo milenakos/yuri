@@ -15,7 +15,7 @@
     <center>
         <div id="static-content">
             <h1>yuri!</h1>
-            <p>images sourced from <a href="https://danbooru.donmai.us/posts?tags=rating%3Ageneral">danbooru</a>!</p>
+            <p>images sourced from <a href="https://safebooru.org/index.php?page=post&s=list&tags=yuri">safebooru</a>!</p>
             <p>click on images to download fullres!!</p>
             <label for="column-slider">columns:</label>
             <input type="range" id="column-slider" min="1" max="10" value="1" />
@@ -29,6 +29,10 @@
         const imageContainer = document.getElementById("content-before-loading");
         const columnSlider = document.getElementById("column-slider");
 
+        const result = await fetch("https://safebooru.org/autocomplete.php?q=yuri");
+        const data = await result.json();
+        const pageCount = Math.floor(Number(data[0].label.match(/\((\d+)\)\s*$/)[1]) / 10);
+
         columnSlider.addEventListener("input", () => {
             const columnCount = columnSlider.value;
             imageContainer.style.display = "grid";
@@ -36,28 +40,13 @@
         });
         
         async function getInformation() {
-            const result = await fetch("https://danbooru.donmai.us/posts.json?tags=yuri+rating:general+order:random&limit=10");
+            const result = await fetch(`https://safebooru.org/index.php?page=dapi&s=post&q=index&json=1&tags=yuri&pid=${Math.floor(Math.random() * (pageCount + 1))}&limit=10`);
             const data = await result.json();
 
             data.forEach(image => {
                 try {
                     const new_img = document.createElement("div");
-                    let new_img_url;
-                    let format;
-
-                    if (image["large_file_url"]) {
-                        new_img_url = image.large_file_url.replace("cdn.donmai.us", "proxy.yuri.page");
-                    } else {
-                        new_img_url = image.file_url.replace("cdn.donmai.us", "proxy.yuri.page");
-                    }
-
-                    if (image.media_asset.duration) {
-                        format = "video";
-                    } else {
-                        format = "img";
-                    }
-    
-                    new_img.innerHTML = `<a href="${image.file_url}?download=1"><${format} src="${new_img_url}" style="max-width:100%;"></a>`;
+                    new_img.innerHTML = `<a href="${image.file_url}?download=1"><img src="${image.sample_url}" style="max-width:100%;"></a>`;
                     imageContainer.appendChild(new_img);
                 } catch (e) {
                     console.error(e);
