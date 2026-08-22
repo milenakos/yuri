@@ -50,7 +50,7 @@
             data.forEach(image => {
                 try {
                     const new_img = document.createElement("div");
-                    new_img.innerHTML = `<a href="${image.file_url}?download=1"><img src="${image.sample_url}" style="max-width:100%;"></a>`;
+                    new_img.innerHTML = `<img src="${image.sample_url}" style="max-width:100%;" onclick="downloadImage(this.src)" style="cursor: pointer;">`;
                     imageContainer.appendChild(new_img);
                 } catch (e) {
                     console.error(e);
@@ -58,6 +58,18 @@
             });
 
             loading = false;
+        }
+
+        async function downloadImage(url) {
+            const response = await fetch(url);
+            const blob = await response.blob();
+            
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "image.jpg";
+            link.click();
+            
+            URL.revokeObjectURL(link.href);
         }
 
         window.addEventListener("scroll", async () => {
