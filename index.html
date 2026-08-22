@@ -38,13 +38,13 @@
         });
         
         async function getInformation() {
-            if (pageCount = 0) {
-                const result = await fetch("https://safebooru.org/autocomplete.php?q=yuri");
+            if (pageCount === 0) {
+                const result = await fetch("https://proxy.yuri.page/autocomplete.php?q=yuri");
                 const data = await result.json();
                 pageCount = Math.floor(Number(data[0].label.match(/\((\d+)\)\s*$/)[1]) / 10);
             }
             
-            const result = await fetch(`https://safebooru.org/index.php?page=dapi&s=post&q=index&json=1&tags=yuri&pid=${Math.floor(Math.random() * (pageCount + 1))}&limit=10`);
+            const result = await fetch(`https://proxy.yuri.page/index.php?page=dapi&s=post&q=index&json=1&tags=yuri&limit=10&pid=${Math.floor(Math.random() * (pageCount + 1))}`);
             const data = await result.json();
 
             data.forEach(image => {
