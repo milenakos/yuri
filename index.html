@@ -50,7 +50,7 @@
             data.forEach(image => {
                 try {
                     const new_img = document.createElement("div");
-                    new_img.innerHTML = `<img src="${image.sample_url}" style="max-width:100%;cursor:pointer;" onclick="downloadImage(${image.file_url})">`;
+                    new_img.innerHTML = `<img src="${image.sample_url}" style="max-width:100%;cursor:pointer;" onclick="downloadImage('${image.file_url.replace("safebooru.org", "proxy.yuri.page")}')">`;
                     imageContainer.appendChild(new_img);
                 } catch (e) {
                     console.error(e);
@@ -61,7 +61,6 @@
         }
 
         async function downloadImage(url) {
-            url = url.replace("safebooru.org", "proxy.yuri.page");
             const response = await fetch(url);
             const blob = await response.blob();
 
